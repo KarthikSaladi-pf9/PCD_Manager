@@ -13,6 +13,7 @@ import ResetConfirmation from "./ResetConfirmation";
 import TagManager from "./TagManager";
 import SearchBar from "./SearchBar";
 import ExportButton from "./ExportButton";
+import LoadingDots from "./LoadingDots";
 
 type TableProps = {
   data: GroupedData[];
@@ -344,7 +345,7 @@ const Table: React.FC<TableProps> = ({ data, customerEmails, environment }) => {
                       {region.region_name === "Infra" ? (
                         "N/A"
                       ) : loadingHosts ? (
-                        <span className="text-gray-400">...</span>
+                        <LoadingDots />
                       ) : hostDataMap[region.fqdn] ? (
                         hostDataMap[region.fqdn].length === 0 ? (
                           "0 / 0"
@@ -367,7 +368,7 @@ const Table: React.FC<TableProps> = ({ data, customerEmails, environment }) => {
                     </td>
                     <td className="px-4 py-3 border border-gray-200">
                       {loadingPods ? (
-                        <span className="text-gray-400">...</span>
+                        <LoadingDots />
                       ) : (
                         (() => {
                           const pods = getPodsForNamespace(

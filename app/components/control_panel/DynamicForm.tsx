@@ -120,7 +120,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       <div className="flex flex-col md:flex-row gap-4">
         <div className="w-full">
           <label className="block text-gray-700 mb-1" htmlFor="shortName">
-            PCD Short Name
+            PCD Short Name <span className="text-red-500">*</span>
           </label>
           {step === "create" ? (
             <input
@@ -160,7 +160,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
 
         <div className="w-full">
           <label className="block text-gray-700 mb-1" htmlFor="regionName">
-            Region Name
+            Region Name{" "}
+            {step === "create" ? "" : <span className="text-red-500">*</span>}
           </label>
           {["addRegion", "create"].includes(step) ? (
             step === "addRegion" ? (
@@ -240,6 +241,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           <div className="w-full">
             <label htmlFor="adminEmail" className="block text-gray-700 mb-1">
               Admin Email
+              {step === "create" ? (
+                <span className="text-red-500"> *</span>
+              ) : (
+                ""
+              )}
             </label>
             <input
               type="email"
@@ -268,7 +274,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             />
           </div>
           <div className="w-full">
-            <label className="block text-gray-700 mb-1">Admin Password</label>
+            <label className="block text-gray-700 mb-1">
+              Admin Password <span className="text-red-500">*</span>
+            </label>
             <PasswordInput
               value={formData.adminPassword}
               onChange={handleInputChange}
@@ -283,7 +291,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           {step !== "upgrade" && (
             <div className="w-full md:w-1/3">
               <label htmlFor="dbBackend" className="block text-gray-700 mb-1">
-                DB Backend
+                DB Backend{" "}
+                {step === "addRegion" ? (
+                  ""
+                ) : (
+                  <span className="text-red-500">*</span>
+                )}
               </label>
               {step === "create" ? (
                 <select
@@ -318,7 +331,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           {step !== "upgrade" && (
             <div className="w-full md:w-1/3">
               <label htmlFor="cluster" className="block text-gray-700 mb-1">
-                Dataplane
+                Dataplane{" "}
+                {step === "addRegion" ? (
+                  ""
+                ) : (
+                  <span className="text-red-500">*</span>
+                )}
               </label>
               {step === "create" ? (
                 <select
@@ -350,7 +368,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           {/* Chart Version */}
           <div className="w-full md:w-1/3">
             <label htmlFor="charturl" className="block text-gray-700 mb-1">
-              Chart Version
+              Chart Version{" "}
+              {step === "addRegion" ? (
+                ""
+              ) : (
+                <span className="text-red-500">*</span>
+              )}
             </label>
             {step === "create" || step === "upgrade" ? (
               <>
@@ -437,6 +460,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               {step === "updateLease"
                 ? "Set New Lease Duration"
                 : "Lease Duration"}
+              <span className="text-red-500">*</span>
             </label>
             <select
               id="leaseSelector"
@@ -540,9 +564,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
             htmlFor="tags"
             className="block text-gray-700 mb-1 font-medium"
           >
-            Tags
+            Tags <span className="text-red-500">*</span>
           </label>
-          <div className="flex flex-wrap gap-2 items-center border px-3 py-2 rounded-xl focus-within:ring-2 focus-within:ring-blue-400">
+
+          <div className="flex flex-wrap gap-2 items-center border px-3 py-2 rounded-xl focus-within:ring-blue-400">
             {formData.tags
               .split(",")
               .filter(Boolean)
@@ -571,59 +596,41 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                   </button>
                 </span>
               ))}
-
-            <input
-              type="text"
-              placeholder="Type and press Enter"
-              onKeyDown={(e) => {
-                const input = (e.target as HTMLInputElement).value.trim();
-                if (e.key === "Enter" && input !== "") {
-                  e.preventDefault();
-                  const currentTags = formData.tags
-                    .split(",")
-                    .map((t) => t.trim())
-                    .filter(Boolean);
-
-                  if (!currentTags.includes(input)) {
-                    handleInputChange({
-                      target: {
-                        name: "tags",
-                        value: [...currentTags, input].join(","),
-                      },
-                    } as React.ChangeEvent<HTMLInputElement>);
-                  }
-                  (e.target as HTMLInputElement).value = "";
-                }
-              }}
-              className="flex-1 min-w-[120px] border-none outline-none focus:ring-0"
-            />
           </div>
 
-          {/* Optional tag suggestions */}
+          {/* Suggested tags */}
           <div className="flex flex-wrap gap-2 mt-2">
-            {Tag_suggestions.map((suggestion) => (
-              <button
-                key={suggestion}
-                type="button"
-                onClick={() => {
-                  const currentTags = formData.tags
-                    .split(",")
-                    .map((t) => t.trim())
-                    .filter(Boolean);
-                  if (!currentTags.includes(suggestion)) {
-                    handleInputChange({
-                      target: {
-                        name: "tags",
-                        value: [...currentTags, suggestion].join(","),
-                      },
-                    } as React.ChangeEvent<HTMLInputElement>);
-                  }
-                }}
-                className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-300 cursor-pointer"
-              >
-                {suggestion}
-              </button>
-            ))}
+            {Tag_suggestions.map((suggestion) => {
+              const currentTags = formData.tags
+                .split(",")
+                .map((t) => t.trim())
+                .filter(Boolean);
+              const isSelected = currentTags.includes(suggestion);
+
+              return (
+                <button
+                  key={suggestion}
+                  type="button"
+                  onClick={() => {
+                    if (!isSelected) {
+                      handleInputChange({
+                        target: {
+                          name: "tags",
+                          value: [...currentTags, suggestion].join(","),
+                        },
+                      } as React.ChangeEvent<HTMLInputElement>);
+                    }
+                  }}
+                  className={`px-3 py-1 rounded-full text-sm cursor-pointer ${
+                    isSelected
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  {suggestion}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

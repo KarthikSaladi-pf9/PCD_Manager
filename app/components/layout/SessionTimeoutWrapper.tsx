@@ -1,20 +1,32 @@
 "use client";
 
 import { useEffect } from "react";
-import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function SessionTimeoutWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      signOut({ callbackUrl: "/auth" });
-    }, 60 * 60 * 1000);
+  const router = useRouter();
 
-    return () => clearTimeout(timeout); // cleanup on unmount
-  }, []);
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await fetch("/api/auth/session");
+        const data = await res.json();
+        if (!data?.user) {
+          router.replace("/auth");
+        }
+      } catch {
+        router.replace("/auth");
+      }
+    };
+
+    const interval = setInterval(checkSession, 30 * 1000); // check every 30s
+
+    return () => clearInterval(interval);
+  }, [router]);
 
   return <>{children}</>;
 }

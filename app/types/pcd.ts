@@ -1,3 +1,5 @@
+import { JWT } from "next-auth/jwt";
+
 export interface APIItem {
   customer_shortname: string;
   region_name: string;
@@ -132,6 +134,13 @@ export interface GoogleIdToken {
   name?: string;
   picture?: string;
   sub?: string;
+}
+
+export interface JWTToken extends JWT {
+  accessToken: string;
+  refreshToken?: string;
+  expiresAt?: number;
+  error?: string;
 }
 
 export type PrometheusResultEntry = {

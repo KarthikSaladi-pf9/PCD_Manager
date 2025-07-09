@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { environment, fqdn, tag } = body;
-    const cleanTag = tag?.trim().toLowerCase();
+    const cleanTag = tag?.trim();
 
     if (!environment || !fqdn || !cleanTag) {
       log.warn(`Missing required fields. Body: ${JSON.stringify(body)}`);
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const currentMetadata = data.details?.metadata || {};
     const existingTags = (currentMetadata.tags || "")
       .split(",")
-      .map((t: string) => t.trim().toLowerCase())
+      .map((t: string) => t.trim())
       .filter(Boolean);
 
     // Step 2: Merge tag

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { GroupedData, APIItem } from "@/app/types/pcd";
-import { environmentOptions, log } from "@/app/constants/pcd"; // make sure environmentOptions is exported from here
+import { environmentOptions, log } from "@/app/constants/pcd";
 
 async function fetchAPIData(env: string): Promise<GroupedData[]> {
   const selectedEnv = environmentOptions.find((e) => e.value === env);
@@ -43,9 +43,17 @@ async function fetchAPIData(env: string): Promise<GroupedData[]> {
     });
   }
 
-  const result = Object.values(groupedMap).sort((a, b) =>
-    a.customer.localeCompare(b.customer)
-  );
+  const result = Object.values(groupedMap)
+    .map((group) => {
+      // Sort regions so "Infra" comes first
+      group.regions.sort((a, b) => {
+        if (a.region_name === "Infra") return -1;
+        if (b.region_name === "Infra") return 1;
+        return 0;
+      });
+      return group;
+    })
+    .sort((a, b) => a.customer.localeCompare(b.customer));
 
   log.success(` Grouped data for ${result.length} customers`);
   return result;

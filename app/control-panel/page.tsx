@@ -13,7 +13,6 @@ import {
   ReleaseResponse,
   AdminEmail,
   FormData,
-  Region,
   DataPlane,
 } from "../types/pcd";
 
@@ -319,10 +318,7 @@ export default function ManagePCDPage() {
       setIsLoading(true);
       try {
         // Set Shortnames
-        const infraOnly: Region[] = data.flatMap((customer) =>
-          customer.regions.filter((region) => region.region_name === "Infra")
-        );
-        setShortNames(infraOnly.map((r) => r.namespace));
+        setShortNames(data.map((customer) => customer.customer));
 
         // Find region names for selected customer
         const customerData = data.find(
@@ -451,7 +447,7 @@ export default function ManagePCDPage() {
 
   return (
     <>
-      <NavBar isControlPanel={true} />
+      <NavBar pageName="control-panel" />
       <div className="min-h-screen bg-cover bg-center flex items-start pt-20 px-6 bg-gray-700">
         <div className="flex w-full max-w-7xl bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl mx-auto border border-gray-300 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] overflow-hidden">
           {/* Left: StepSelect - 1/3 */}

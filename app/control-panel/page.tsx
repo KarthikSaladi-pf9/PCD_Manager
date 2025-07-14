@@ -447,7 +447,7 @@ export default function ManagePCDPage() {
 
   return (
     <>
-      <NavBar pageName="control-panel" />
+      <NavBar isControlPanel={true} />
       <div className="min-h-screen bg-cover bg-center flex items-start pt-20 px-6 bg-gray-700">
         <div className="flex w-full max-w-7xl bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl mx-auto border border-gray-300 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] overflow-hidden">
           {/* Left: StepSelect - 1/3 */}

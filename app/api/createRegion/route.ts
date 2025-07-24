@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
       reqDeploy.write(
         JSON.stringify({
           admin_password: adminPassword,
-          aim: isInfra ? cluster ?? AIM : AIM,
+          aim: isInfra ? cluster : AIM,
           dbbackend: dbBackend,
           regionname: isInfra ? "Infra" : normalizedRegionName,
           options: {

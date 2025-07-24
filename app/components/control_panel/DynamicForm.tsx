@@ -347,6 +347,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                   className="w-full border px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                 >
                   <option value="">Select Dataplane</option>
+                  <option value="opencloud">Opencloud</option>
                   {datplaneOptions.map(({ dataplane }) => (
                     <option key={dataplane} value={dataplane}>
                       {dataplane}

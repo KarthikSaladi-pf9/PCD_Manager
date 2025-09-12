@@ -352,7 +352,13 @@ const Table: React.FC<TableProps> = ({ data, customerEmails, environment }) => {
                         ) : (
                           <button
                             onClick={() => handleHostClick(region.fqdn)}
-                            className="text-blue-700 hover:text-blue-900 cursor-pointer"
+                            className={`cursor-pointer ${
+                              hostDataMap[region.fqdn].filter(
+                                (h) => h.value === "1"
+                              ).length !== hostDataMap[region.fqdn].length
+                                ? "text-red-700 hover:text-red-900"
+                                : "text-blue-700 hover:text-blue-900"
+                            }`}
                           >
                             {
                               hostDataMap[region.fqdn].filter(
@@ -366,6 +372,7 @@ const Table: React.FC<TableProps> = ({ data, customerEmails, environment }) => {
                         "0 / 0"
                       )}
                     </td>
+
                     <td className="px-4 py-3 border border-gray-200">
                       {loadingPods ? (
                         <LoadingDots />
@@ -387,7 +394,11 @@ const Table: React.FC<TableProps> = ({ data, customerEmails, environment }) => {
                                   result: pods,
                                 })
                               }
-                              className="text-blue-700 hover:text-blue-900 cursor-pointer"
+                              className={`cursor-pointer ${
+                                running !== pods.length
+                                  ? "text-red-700 hover:text-red-900"
+                                  : "text-blue-700 hover:text-blue-900"
+                              }`}
                             >
                               {running} / {pods.length}
                             </button>

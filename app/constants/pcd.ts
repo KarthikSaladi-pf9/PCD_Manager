@@ -8,6 +8,18 @@ export const colorClasses: Record<string, string> = {
 
 export const environmentOptions = [
   {
+    value: "spot-dev",
+    label: "Spot Dev",
+    tempusUrl: "https://tempus-dev.platform9.horse",
+    customerSlackChannel: "https://platform9.slack.com/archives/C01E7254V9V",
+    upgradeSlackChannel: "https://platform9.slack.com/archives/C01EJMAUXJ9",
+    borkUrl: "https://bork-pcdv.dev.pf9.io",
+    type: "dev",
+    domain: ".dev.pf9.io",
+    cortexUrl: "https://pcd-dev.pf9cortex.platform9.net",
+    cortex_user: "svc_cortex_pcd_dev",
+  },
+  {
     value: "us-dev",
     label: "US Dev",
     tempusUrl: "https://tempus-dev.platform9.horse",
@@ -141,6 +153,7 @@ export const Tag_suggestions = [
   "PCD-V",
   "PCD-K",
   "Training",
+  "Siemens",
 ];
 
 export const CHARTS_CACHE_TTL = 60 * 60 * 1000;
